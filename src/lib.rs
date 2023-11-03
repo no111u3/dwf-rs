@@ -3,6 +3,9 @@ use std::ffi::CStr;
 use std::mem;
 
 pub mod dwf;
+pub mod device;
+
+pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(PartialEq, Debug)]
 pub enum LibError {
@@ -47,7 +50,7 @@ pub enum Error {
 }
 
 impl Error {
-    pub fn get_error_message(&self) -> Result<String, Error> {
+    pub fn get_error_message(&self) -> Result<String> {
         unsafe {
             let mut error_message = [0i8; 512];
             if dwf::from_c_bool(dwf::FDwfGetLastErrorMsg(error_message.as_mut_ptr())) {
@@ -62,7 +65,7 @@ impl Error {
     }
 }
 
-fn check_call(status: dwf::BOOL) -> Result<(), Error> {
+fn check_call(status: dwf::BOOL) -> Result<()> {
     if dwf::from_c_bool(status) {
         Ok(())
     } else {
@@ -89,7 +92,7 @@ fn get_error_code() -> Error {
     }
 }
 
-pub fn get_version() -> Result<String, Error> {
+pub fn get_version() -> Result<String> {
     let mut version = [0i8; 32];
     unsafe {
         check_call(dwf::FDwfGetVersion(version.as_mut_ptr()))?;
