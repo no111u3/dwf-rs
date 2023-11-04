@@ -2,8 +2,8 @@ use crate::Error::FailToGetErrorMessage;
 use std::ffi::CStr;
 use std::mem;
 
-pub mod dwf;
 pub mod device;
+pub mod dwf;
 
 pub type Result<T> = std::result::Result<T, Error>;
 

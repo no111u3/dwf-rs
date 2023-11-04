@@ -1,6 +1,6 @@
-use std::ffi::c_int;
 use crate::dwf;
-use crate::{Result, check_call};
+use crate::{check_call, Result};
+use std::ffi::c_int;
 
 use std::mem;
 
@@ -14,9 +14,7 @@ impl Device {
             let mut handle = mem::MaybeUninit::uninit();
             check_call(dwf::FDwfDeviceOpen(index as c_int, handle.as_mut_ptr()))?;
             let handle = handle.assume_init();
-            Ok(Device {
-                handle
-            })
+            Ok(Device { handle })
         }
     }
 }
