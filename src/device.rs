@@ -17,6 +17,13 @@ impl Device {
             Ok(Device { handle })
         }
     }
+
+    pub fn reset(&self) -> Result<()> {
+        unsafe {
+            check_call(dwf::FDwfDeviceReset(self.handle as dwf::HDWF))?;
+        }
+        Ok(())
+    }
 }
 
 impl Default for Device {

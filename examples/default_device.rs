@@ -1,5 +1,7 @@
 use dwf;
 
 fn main() {
-    dwf::device::Device::default();
+    let device = dwf::device::Device::default();
+
+    device.reset().unwrap();
 }
