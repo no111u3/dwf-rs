@@ -3,6 +3,7 @@ use std::ffi::CStr;
 use std::mem;
 
 pub mod device;
+pub mod device_info;
 pub mod dwf;
 
 pub type Result<T> = std::result::Result<T, Error>;
