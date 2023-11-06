@@ -52,7 +52,7 @@ impl Drop for Device {
 }
 
 impl DeviceId for Device {
-    fn get_device_id(&self) -> i32 {
+    fn get_device_id(&self) -> c_int {
         self.handle - 1
     }
 }

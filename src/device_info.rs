@@ -4,7 +4,7 @@ use crate::{check_call, Result};
 use std::ffi::{c_char, c_int, CStr};
 use std::mem;
 pub trait DeviceId {
-    fn get_device_id(&self) -> i32;
+    fn get_device_id(&self) -> c_int;
 }
 
 pub trait DeviceInfo: DeviceId {
@@ -12,7 +12,7 @@ pub trait DeviceInfo: DeviceId {
         let mut name = [0 as c_char; 32];
         unsafe {
             check_call(dwf::FDwfEnumDeviceName(
-                self.get_device_id() as c_int,
+                self.get_device_id(),
                 name.as_mut_ptr(),
             ))?;
 
@@ -26,10 +26,7 @@ pub trait DeviceInfo: DeviceId {
     fn get_device_serial(&self) -> Result<String> {
         let mut serial = [0 as c_char; 32];
         unsafe {
-            check_call(dwf::FDwfEnumSN(
-                self.get_device_id() as c_int,
-                serial.as_mut_ptr(),
-            ))?;
+            check_call(dwf::FDwfEnumSN(self.get_device_id(), serial.as_mut_ptr()))?;
 
             Ok(CStr::from_ptr(mem::transmute(serial.as_mut_ptr()))
                 .to_str()
@@ -42,7 +39,7 @@ pub trait DeviceInfo: DeviceId {
         unsafe {
             let mut in_use = mem::MaybeUninit::uninit();
             check_call(dwf::FDwfEnumDeviceIsOpened(
-                self.get_device_id() as c_int,
+                self.get_device_id(),
                 in_use.as_mut_ptr() as *mut dwf::BOOL,
             ))?;
 
