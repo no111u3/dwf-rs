@@ -1,7 +1,7 @@
 [package]
 name = "dwf"
 version = "0.1.0"
-categories = ["embedded", "dwf"]
+categories = ["embedded"]
 authors = ["Boris Vinogradov <no111u3@gmail.com"]
 description = "Digilent WaveForms library Rust wrapper"
 documentation = "https://docs.rs/dwf"
