@@ -1,6 +1,14 @@
 [package]
 name = "dwf"
 version = "0.1.0"
+categories = ["embedded", "dwf"]
+authors = ["Boris Vinogradov <no111u3@gmail.com"]
+description = "Digilent WaveForms library Rust wrapper"
+documentation = "https://docs.rs/dwf"
+keywords = ["embedded", "dwf"]
+readme = "README.md"
+license = "Apache-2.0"
+repository = "https://github.com/no111u3/dwf-rs"
 edition = "2021"
 
 [dependencies]
