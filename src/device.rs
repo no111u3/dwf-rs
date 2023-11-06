@@ -1,3 +1,4 @@
+use crate::analog::analog_in::AnalogIn;
 use crate::device_info::{DeviceId, DeviceInfo};
 use crate::dwf;
 use crate::{check_call, Result};
@@ -25,6 +26,14 @@ impl Device {
             check_call(dwf::FDwfDeviceReset(self.handle as dwf::HDWF))?;
         }
         Ok(())
+    }
+
+    pub fn get_handle(&self) -> dwf::HDWF {
+        self.handle
+    }
+
+    pub fn analog_in(&self) -> AnalogIn {
+        AnalogIn::new(&self)
     }
 }
 

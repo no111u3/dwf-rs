@@ -2,6 +2,7 @@ use crate::Error::FailToGetErrorMessage;
 use std::ffi::CStr;
 use std::mem;
 
+pub mod analog;
 pub mod device;
 pub mod device_info;
 pub mod dwf;
