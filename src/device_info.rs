@@ -46,9 +46,7 @@ pub trait DeviceInfo: DeviceId {
                 in_use.as_mut_ptr() as *mut dwf::BOOL,
             ))?;
 
-            let in_use = in_use.assume_init();
-
-            in_use
+            in_use.assume_init()
         }
     }
 }

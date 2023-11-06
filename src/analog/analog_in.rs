@@ -1,5 +1,4 @@
 use crate::device::Device;
-use crate::device_info::DeviceId;
 use crate::dwf;
 use crate::dwf::to_c_bool;
 use crate::{check_call, Result};
@@ -100,7 +99,7 @@ impl<'a> AnalogIn<'a> {
     // TODO: Rework to check channel index
     pub fn channel(&self, ix: i32) -> AnalogInChannel {
         AnalogInChannel {
-            input: &self,
+            input: self,
             ix: ix as c_int,
         }
     }
@@ -149,13 +148,14 @@ impl<'a> AnalogInChannel<'a> {
         unsafe {
             let original_len = dest.len();
             dest.reserve(available as usize);
-            dest.set_len(original_len + available as usize);
+            let remaining = dest.spare_capacity_mut();
             check_call(dwf::FDwfAnalogInStatusData(
                 self.input.device.get_handle(),
                 self.ix,
-                dest.as_mut_ptr().offset(original_len as isize),
+                remaining.as_mut_ptr() as *mut f64,
                 available,
             ))?;
+            dest.set_len(original_len + available as usize);
         }
         Ok(())
     }

@@ -33,7 +33,7 @@ impl Device {
     }
 
     pub fn analog_in(&self) -> AnalogIn {
-        AnalogIn::new(&self)
+        AnalogIn::new(self)
     }
 }
 
@@ -53,7 +53,7 @@ impl Drop for Device {
 
 impl DeviceId for Device {
     fn get_device_id(&self) -> i32 {
-        self.handle as i32 - 1
+        self.handle - 1
     }
 }
 

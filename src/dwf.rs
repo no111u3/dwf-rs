@@ -19,9 +19,5 @@ pub fn to_c_bool(v: bool) -> BOOL {
 }
 
 pub fn from_c_bool(v: BOOL) -> bool {
-    if v == true_ as i32 as BOOL {
-        true
-    } else {
-        false
-    }
+    v == true_ as i32 as BOOL
 }
