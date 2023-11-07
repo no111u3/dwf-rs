@@ -54,6 +54,28 @@ impl<'a> AnalogIn<'a> {
         Ok(())
     }
 
+    pub fn set_buffer_size(&self, size: i32) -> Result<()> {
+        unsafe {
+            check_call(dwf::FDwfAnalogInBufferSizeSet(
+                self.device.get_handle(),
+                size,
+            ))?;
+        }
+        Ok(())
+    }
+
+    pub fn get_buffer_size(&self) -> Result<i32> {
+        unsafe {
+            let mut size = mem::MaybeUninit::uninit();
+            check_call(dwf::FDwfAnalogInBufferSizeGet(
+                self.device.get_handle(),
+                size.as_mut_ptr(),
+            ))?;
+
+            Ok(size.assume_init())
+        }
+    }
+
     pub fn get_status(&self) -> Result<AnalogAcquisitionStatus> {
         unsafe {
             let mut state = mem::MaybeUninit::uninit();
@@ -133,6 +155,24 @@ impl<'a> AnalogInChannel<'a> {
         Ok(())
     }
 
+    pub fn set_filter(&self, filter: AnalogFilter) -> Result<()> {
+        unsafe {
+            let filter = {
+                match filter {
+                    AnalogFilter::Average => dwf::filterAverage,
+                    AnalogFilter::Decimate => dwf::filterDecimate,
+                    AnalogFilter::MinMax => dwf::filterMinMax,
+                }
+            };
+            check_call(dwf::FDwfAnalogInChannelFilterSet(
+                self.input.device.get_handle(),
+                self.ix,
+                filter,
+            ))?;
+        }
+        Ok(())
+    }
+
     pub fn enable(&self) -> Result<()> {
         unsafe {
             check_call(dwf::FDwfAnalogInChannelEnableSet(
@@ -159,4 +199,10 @@ impl<'a> AnalogInChannel<'a> {
         }
         Ok(())
     }
+}
+
+pub enum AnalogFilter {
+    Decimate,
+    Average,
+    MinMax,
 }
