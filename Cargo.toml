@@ -12,3 +12,6 @@ repository = "https://github.com/no111u3/dwf-rs"
 edition = "2021"
 
 [dependencies]
+
+[dev-dependencies]
+gnuplot = "0.0.39"
