@@ -3,8 +3,13 @@ use std::path::PathBuf;
 fn main() {
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    println!("cargo:rustc-link-lib=framework=/Library/Frameworks/dwf.framework/dwf");
-    println!("cargo:rustc-link-arg=-Wl,-rpath,/Library/Frameworks");
+    // TODO: implement this for other platforms
+    if cfg!(target_os = "macos") {
+        println!("cargo:rustc-link-lib=framework=/Library/Frameworks/dwf.framework/dwf");
+        println!("cargo:rustc-link-arg=-Wl,-rpath,/Library/Frameworks");
+    } else {
+        unimplemented!("Mac OS is supported");
+    }
 
     let bindings = bindgen::Builder::default()
         .header("wrapper.h")
