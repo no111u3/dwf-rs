@@ -15,3 +15,6 @@ edition = "2021"
 
 [dev-dependencies]
 gnuplot = "0.0.39"
+
+[build-dependencies]
+bindgen = "0.69.1"
