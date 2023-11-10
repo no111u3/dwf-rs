@@ -1,3 +1,4 @@
+use crate::dwf::DwfError;
 use crate::Error::FailToGetErrorMessage;
 use std::ffi::CStr;
 use std::mem;
@@ -10,45 +11,11 @@ pub mod dwf;
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(PartialEq, Debug)]
-pub enum LibError {
-    NoError,
-    Unknown,
-    ApiLockTimeout,
-    AlreadyOpened,
-    NotSupported,
-    InvalidParameter0,
-    InvalidParameter1,
-    InvalidParameter2,
-    InvalidParameter3,
-    InvalidParameter4,
-}
-
-impl From<dwf::DWFERC> for LibError {
-    fn from(error: dwf::DWFERC) -> Self {
-        use LibError::*;
-
-        match error {
-            dwf::dwfercNoErc => NoError,
-            dwf::dwfercUnknownError => Unknown,
-            dwf::dwfercApiLockTimeout => ApiLockTimeout,
-            dwf::dwfercAlreadyOpened => AlreadyOpened,
-            dwf::dwfercNotSupported => NotSupported,
-            dwf::dwfercInvalidParameter0 => InvalidParameter0,
-            dwf::dwfercInvalidParameter1 => InvalidParameter1,
-            dwf::dwfercInvalidParameter2 => InvalidParameter2,
-            dwf::dwfercInvalidParameter3 => InvalidParameter3,
-            dwf::dwfercInvalidParameter4 => InvalidParameter4,
-            _ => Unknown,
-        }
-    }
-}
-
-#[derive(PartialEq, Debug)]
 pub enum Error {
     FailToRun,
     FailToGetErrorCode,
     FailToGetErrorMessage,
-    FailWithErrorCode(LibError),
+    FailWithErrorCode(DwfError),
 }
 
 impl Error {
@@ -82,8 +49,8 @@ fn get_error_code() -> Error {
             (error_code.as_mut_ptr()) as *mut dwf::DWFERC,
         )) {
             let error_code = error_code.assume_init();
-            let error = LibError::from(error_code);
-            if error == LibError::NoError {
+            let error = DwfError::from(error_code);
+            if error == DwfError::NoError {
                 Error::FailToRun
             } else {
                 Error::FailWithErrorCode(error)

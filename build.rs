@@ -20,7 +20,7 @@ fn main() {
 
     let bindings = bindgen::Builder::default()
         .header("wrapper.h")
-        .clang_arg(format!("-I{}",include_path))
+        .clang_arg(format!("-I{}", include_path))
         .generate()
         .expect("Unable to generate bindings");
 
