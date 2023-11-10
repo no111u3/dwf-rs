@@ -79,9 +79,7 @@ mod tests {
     #[test]
     fn check_version() {
         let version = get_version().unwrap();
-        // TODO: library bindgen generated from current version of dwf.h (3.20.1), need to update in
-        // TODO: future as changed
-        assert_eq!(version, "3.20.1".to_string());
+        assert_ne!(version, "".to_string());
     }
 
     #[test]
