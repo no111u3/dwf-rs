@@ -1,9 +1,9 @@
 use std::env;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 fn main() {
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    let include_path;
+    let mut include_path;
     if cfg!(target_os = "macos") {
         println!("cargo:rustc-link-lib=framework=/Library/Frameworks/dwf.framework/dwf");
         println!("cargo:rustc-link-arg=-Wl,-rpath,/Library/Frameworks");
@@ -16,6 +16,10 @@ fn main() {
         include_path = "/usr/include/digilent/waveforms"
     } else {
         unimplemented!("Only Linux, Mac OS and Windows are supported");
+    }
+
+    if !Path::new(&include_path).exists() {
+        include_path = "includes"
     }
 
     let bindings = bindgen::Builder::default()
